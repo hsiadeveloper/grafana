@@ -7,6 +7,7 @@ import {
   type PluginExtensionCommand,
   type PluginExtensionLink,
   PluginExtensionTypes,
+  AppPluginExtensionCommandHelpers,
 } from '@grafana/data';
 import type { PluginExtensionRegistry, PluginExtensionRegistryItem } from '@grafana/runtime';
 import appEvents from 'app/core/app_events';
@@ -16,7 +17,7 @@ import type { PluginPreloadResult } from '../pluginPreloader';
 
 import { handleErrorsInHandler, handleErrorsInConfigure } from './errorHandling';
 import { PlacementsPerPlugin } from './placementsPerPlugin';
-import { ConfigureFunc } from './types';
+import { CommandHandlerFunc, ConfigureFunc } from './types';
 import { createLinkValidator, isValidLinkPath } from './validateLink';
 
 export function createPluginExtensionRegistry(preloadResults: PluginPreloadResult[]): PluginExtensionRegistry {
@@ -79,8 +80,9 @@ function createCommandRegistryItem(
     logger: console.warn,
   };
 
-  const catchErrorsInHandler = handleErrorsInHandler(options, helpers);
-  const handler = catchErrorsInHandler(config.handler);
+  const handlerWithHelpers: CommandHandlerFunc = (context) => config.handler(context, helpers);
+  const catchErrorsInHandler = handleErrorsInHandler(options);
+  const handler = catchErrorsInHandler(handlerWithHelpers);
 
   const extensionFactory = createCommandFactory(pluginId, config, handler);
 

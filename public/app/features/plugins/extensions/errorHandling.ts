@@ -1,7 +1,5 @@
 import { isFunction, isObject } from 'lodash';
 
-import { AppPluginExtensionCommandHelpers } from '@grafana/data';
-
 import type { CommandHandlerFunc, ConfigureFunc } from './types';
 
 type Options = {
@@ -44,7 +42,7 @@ export function handleErrorsInConfigure<T>(options: Options) {
   };
 }
 
-export function handleErrorsInHandler(options: Options, helpers: AppPluginExtensionCommandHelpers) {
+export function handleErrorsInHandler(options: Options) {
   const { pluginId, title, logger } = options;
 
   return (handler: CommandHandlerFunc): CommandHandlerFunc => {
@@ -55,7 +53,7 @@ export function handleErrorsInHandler(options: Options, helpers: AppPluginExtens
           return;
         }
 
-        const result = handler(context, helpers);
+        const result = handler(context);
         if (result instanceof Promise) {
           logger(
             `[Plugins] ${pluginId} provided an unsupported async/promise-based handler function for command extension '${title}'.`
