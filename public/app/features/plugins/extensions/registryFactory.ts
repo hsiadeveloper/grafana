@@ -9,6 +9,8 @@ import {
   PluginExtensionTypes,
 } from '@grafana/data';
 import type { PluginExtensionRegistry, PluginExtensionRegistryItem } from '@grafana/runtime';
+import appEvents from 'app/core/app_events';
+import { ShowModalReactEvent, ShowModalReactPayload } from 'app/types/events';
 
 import type { PluginPreloadResult } from '../pluginPreloader';
 
@@ -69,6 +71,7 @@ function createCommandRegistryItem(
   config: AppPluginExtensionCommandConfig
 ): PluginExtensionRegistryItem<PluginExtensionCommand> | undefined {
   const configure = config.configure ?? defaultConfigure;
+  const helpers = getCommandHelpers();
 
   const options = {
     pluginId: pluginId,
@@ -76,7 +79,7 @@ function createCommandRegistryItem(
     logger: console.warn,
   };
 
-  const catchErrorsInHandler = handleErrorsInHandler(options);
+  const catchErrorsInHandler = handleErrorsInHandler(options, helpers);
   const handler = catchErrorsInHandler(config.handler);
 
   const extensionFactory = createCommandFactory(pluginId, config, handler);
@@ -171,4 +174,11 @@ function hashKey(key: string): number {
 
 function defaultConfigure() {
   return {};
+}
+
+function getCommandHelpers() {
+  const openModal = ({ component, props }: ShowModalReactPayload) =>
+    appEvents.publish(new ShowModalReactEvent({ component, props }));
+
+  return { openModal };
 }

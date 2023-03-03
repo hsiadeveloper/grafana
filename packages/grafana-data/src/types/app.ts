@@ -64,13 +64,23 @@ export type AppPluginExtensionLinkConfig<C extends object = object> = {
   configure?: (extension: AppPluginExtensionLink, context?: C) => Partial<AppPluginExtensionLink> | undefined;
 };
 
+// A list of helpers that can be used in the command handler
+export type AppPluginExtensionCommandHelpers = {
+  // Opens a modal dialog and renders the provided React component inside it
+  // (It will always receive the `onDismiss()` prop for closing the modal manually), plus the additional `props` provided
+  openModal: <T extends object = object>(payload: {
+    component: React.ComponentType<{ onDismiss: () => void } & T>;
+    props?: Omit<T, 'onDismiss'>;
+  }) => void;
+};
+
 export type AppPluginExtensionCommand = Pick<PluginExtensionCommand, 'description' | 'title'>;
 
 export type AppPluginExtensionCommandConfig<C extends object = object> = {
   title: string;
   description: string;
   placement: string;
-  handler: (context?: C) => void;
+  handler: (context?: C, helpers?: AppPluginExtensionCommandHelpers) => void;
   configure?: (extension: AppPluginExtensionCommand, context?: C) => Partial<AppPluginExtensionCommand> | undefined;
 };
 
