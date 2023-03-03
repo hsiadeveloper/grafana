@@ -39,6 +39,7 @@ interface Props {
   onDataChange: (error: string) => void;
   asyncDefaultQueries?: AlertQuery[];
   asyncDataSource?: DataSourceApi<DataQuery, DataSourceJsonData, {}>;
+  defaults: boolean;
 }
 
 export const QueryAndExpressionsStep: FC<Props> = ({
@@ -47,6 +48,7 @@ export const QueryAndExpressionsStep: FC<Props> = ({
   asyncDefaultQueries,
   asyncDataSource,
   prefill,
+  defaults,
 }) => {
   const runner = useRef(new AlertingQueryRunner());
   const {
@@ -79,7 +81,7 @@ export const QueryAndExpressionsStep: FC<Props> = ({
     runner.current.run(getValues('queries'));
   }, [getValues]);
 
-  const updateWithDefault = !editingExistingRule && !prefill;
+  const updateWithDefault = !editingExistingRule && !prefill && !defaults;
   //once default queries is updated
   useEffect(() => {
     const shouldSetDataQuery = updateWithDefault && !isDirty && asyncDefaultQueries;
@@ -267,7 +269,7 @@ export const QueryAndExpressionsStep: FC<Props> = ({
                 icon="plus"
                 onClick={onAddNewQuery}
                 variant="secondary"
-                aria-label={selectors.components.QueryTab.addQuery}
+                data-testid={selectors.components.QueryTab.addQuery}
                 disabled={noCompatibleDataSources}
               >
                 Add query
