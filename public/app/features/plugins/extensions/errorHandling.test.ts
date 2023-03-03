@@ -82,15 +82,11 @@ describe('error handling for extensions', () => {
 
   describe('error handling for command handler', () => {
     const pluginId = 'grafana-basic-app';
-    const helpers = { openModal: jest.fn() };
-    const errorHandler = handleErrorsInHandler(
-      {
-        pluginId: pluginId,
-        title: 'open modal',
-        logger: jest.fn(),
-      },
-      helpers
-    );
+    const errorHandler = handleErrorsInHandler({
+      pluginId: pluginId,
+      title: 'open modal',
+      logger: jest.fn(),
+    });
 
     it('should be called successfully when handler is ok', () => {
       const handler = jest.fn();
