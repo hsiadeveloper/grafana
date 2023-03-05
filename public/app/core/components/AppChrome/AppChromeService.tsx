@@ -93,8 +93,8 @@ export class AppChromeService {
   };
 
   exitKioskMode() {
-    this.update({ kioskMode: undefined });
-    locationService.partial({ kiosk: null });
+    //this.update({ kioskMode: undefined });
+    //locationService.partial({ kiosk: null });
   }
 
   setKioskModeFromUrl(kiosk: UrlQueryValue) {

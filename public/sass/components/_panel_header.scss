@@ -30,6 +30,11 @@ $panel-header-no-title-zindex: 1;
   display: block;
 }
 
+.panel-title-container-viewer {
+  word-wrap: break-word;
+  display: block;
+}
+
 .panel-title {
   border: 0px;
   font-weight: $font-weight-semi-bold;

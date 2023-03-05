@@ -66,7 +66,7 @@
         height: 60px;
         background-repeat: no-repeat;
         background-size: contain;
-        background-image: url('[[.LoadingLogo]]');
+        /*background-image: url('[[.LoadingLogo]]');*/
       }
 
       .preloader__text {
@@ -176,7 +176,7 @@
           <div class="preloader__logo"></div>
         </div>
       </div>
-      <div class="preloader__text">Loading Grafana</div>
+      <div class="preloader__text">Loading...</div>
       <div class="preloader__text preloader__text--fail">
         <p>
           <strong>If you're seeing this Grafana has failed to load its application files</strong>
@@ -281,6 +281,10 @@
 
       // In case the js files fails to load the code below will show an info message.
       window.onload = function() {
+        if (window.parent) {
+          window.parent.postMessage("grafana-loaded", "*");
+        }
+
         if (window.__grafana_app_bundle_loaded) {
           return;
         }

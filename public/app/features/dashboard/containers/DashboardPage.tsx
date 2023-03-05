@@ -366,6 +366,10 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
       'page-hidden': Boolean(queryParams.editview || editPanel),
     });
 
+    if (window.parent) {
+      window.parent.postMessage('grafana-dashboard-loaded', '*');
+    }
+
     return (
       <>
         <Page

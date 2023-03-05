@@ -24,9 +24,9 @@ export const DashboardLoading = ({ initPhase }: Props) => {
             <Spinner inline={true} /> {initPhase}
           </HorizontalGroup>{' '}
           <HorizontalGroup align="center" justify="center">
-            <Button variant="secondary" size="md" icon="repeat" onClick={cancelVariables}>
-              Cancel loading dashboard
-            </Button>
+            {/*<Button  variant="secondary" size="md" icon="repeat" onClick={cancelVariables}>*/}
+            {/*  Cancel loading dashboard*/}
+            {/*</Button>*/}
           </HorizontalGroup>
         </VerticalGroup>
       </div>

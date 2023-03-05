@@ -1,6 +1,7 @@
 import React, { HTMLAttributes, MouseEvent, ReactElement, useCallback, useState } from 'react';
 
 import { CartesianCoords2D } from '@grafana/data';
+import config from 'app/core/config';
 
 interface PanelHeaderMenuTriggerApi {
   panelMenuOpen: boolean;
@@ -33,8 +34,15 @@ export function PanelHeaderMenuTrigger({ children, ...divProps }: Props) {
     [setClickCoordinates]
   );
 
+  const isAdmin = config.bootData.user.isGrafanaAdmin;
+
   return (
-    <header {...divProps} className="panel-title-container" onClick={onMenuToggle} onMouseDown={onMouseDown}>
+    <header
+      {...divProps}
+      className={isAdmin ? 'panel-title-container' : 'panel-title-container-viewer'}
+      onClick={onMenuToggle}
+      onMouseDown={onMouseDown}
+    >
       {children({ panelMenuOpen, closeMenu: () => setPanelMenuOpen(false) })}
     </header>
   );

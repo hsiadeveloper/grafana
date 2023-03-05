@@ -10,6 +10,7 @@ import {
   LiveChannelScope,
 } from '@grafana/data';
 import { getGrafanaLiveSrv, locationService } from '@grafana/runtime';
+import config from 'app/core/config';
 import { appEvents, contextSrv } from 'app/core/core';
 import { sessionId } from 'app/features/live';
 
@@ -122,8 +123,9 @@ class DashboardWatcher {
 
             const showPopup = this.editing || dash.hasUnsavedChanges();
 
+            const isAdmin = config.bootData.user.isGrafanaAdmin;
             if (action === DashboardEventAction.Saved) {
-              if (showPopup) {
+              if (showPopup && isAdmin) {
                 appEvents.publish(
                   new ShowModalReactEvent({
                     component: DashboardChangedModal,
@@ -131,10 +133,12 @@ class DashboardWatcher {
                   })
                 );
               } else {
-                appEvents.emit(AppEvents.alertSuccess, ['Dashboard updated']);
+                if (isAdmin) {
+                  appEvents.emit(AppEvents.alertSuccess, ['Dashboard updated']);
+                }
                 this.reloadPage();
               }
-            } else if (showPopup) {
+            } else if (showPopup && isAdmin) {
               if (action === DashboardEventAction.EditingStarted && !this.hasSeenNotice) {
                 const editingEvent = event.message;
                 const recent = this.getRecentEditingEvent();
