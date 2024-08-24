@@ -331,7 +331,7 @@ export class BackendSrv implements BackendService {
         if (!err.isHandled) {
           this.showErrorAlert(options, err);
         }
-      }, 50);
+      }, 20);
     }
 
     this.inspectorStream.next({ response: err, requestId: options.requestId });

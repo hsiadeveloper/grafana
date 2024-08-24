@@ -555,6 +555,7 @@ export class PanelStateWrapper extends PureComponent<Props, State> {
   debouncedSetPanelAttention() {}
 
   render() {
+    const isAdmin = config.bootData.user.isGrafanaAdmin;
     const { dashboard, panel, width, height, plugin } = this.props;
     const { errorMessage, data } = this.state;
     const { transparent } = panel;
@@ -579,7 +580,7 @@ export class PanelStateWrapper extends PureComponent<Props, State> {
         statusMessageOnClick={panelChromeProps.onOpenErrorInspect}
         description={panelChromeProps.description}
         titleItems={panelChromeProps.titleItems}
-        menu={this.props.hideMenu ? undefined : menu}
+        menu={this.props.hideMenu || !isAdmin ? undefined : menu}
         dragClass={panelChromeProps.dragClass}
         dragClassCancel="grid-drag-cancel"
         padding={panelChromeProps.padding}

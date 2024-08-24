@@ -114,6 +114,11 @@ const getStyles = (theme: GrafanaTheme2) => ({
     '.react-resizable-handle': {
       display: 'none',
     },
+
+    '.panel-title-container-viewer': {
+      'word-wrap': 'break-word',
+      display: 'block',
+    }
   }),
 });
 
@@ -373,6 +378,10 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
       [styles.fullScreenPanel]: Boolean(viewPanel),
       'page-hidden': Boolean(queryParams.editview || editPanel),
     });
+
+    if (window.parent) {
+      window.parent.postMessage('grafana-dashboard-loaded', '*');
+    }
 
     if (dashboard.meta.dashboardNotFound) {
       return (
